@@ -6,10 +6,11 @@ import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import SuccessModal from "../modals/SuccessModal"
 import LoadingSpinner from "../ui/LoadingSpinner"
-import { Teacher } from "@/types/Teacher"
-import { addTeacher } from "@/api/teachers"
+import { addGuardian } from "@/api/guardians"
+import { Guardian } from "@/types/Guardian"
 
-export default function AddTeacherForm(){
+
+export default function GuardianDetailsForm(){
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [phone, setPhone] = useState("")
@@ -18,9 +19,9 @@ export default function AddTeacherForm(){
 
     const queryClient = useQueryClient()
     const mutation = useMutation({
-        mutationFn: addTeacher,
-        onSuccess: () => {queryClient.invalidateQueries({queryKey: ["teachers"]})},
-        onError:(err)=> console.error("Error adding teacher", err)
+        mutationFn: addGuardian,
+        onSuccess: () => {queryClient.invalidateQueries({queryKey: ["guardians"]})},
+        onError:(err)=> console.error(err)
     })
 
     function clearInputs(){
@@ -32,15 +33,15 @@ export default function AddTeacherForm(){
 
     async function submit(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault()
-        const teacher: Teacher = {
+        const guardian: Guardian = {
             firstName,
             lastName,
             phone,
             email
         }
         try {
-            await mutation.mutateAsync(teacher)
-            console.log("Teacher Added", teacher)
+            await mutation.mutateAsync(guardian)
+            console.log("Guardian Added", guardian)
             setIsSuccessModalOpen(true)
         }catch(err){
             console.error(err)
@@ -49,7 +50,7 @@ export default function AddTeacherForm(){
 
   return (
     
-    <FormContainer title="Add Teacher" submit={submit}>
+    <FormContainer title="Add Guardian" submit={submit}>
         <FormInput
         label="First Name"
         name="firstName"
@@ -62,7 +63,6 @@ export default function AddTeacherForm(){
         value={lastName}
         onChange={(e) => setLastName(e.target.value)}
         />
-        {/* TBD make a phone input component */}
         <FormInput
         label="Phone"
         name="phone"
@@ -80,9 +80,9 @@ export default function AddTeacherForm(){
         />
        
         {mutation.isPending && <LoadingSpinner/> }
-       {mutation.error && "Error Adding Teacher"}
+       {mutation.error && "Error Adding Guardian"}
        <SuccessModal
-       title="Teacher Added"
+       title="Guardian Added"
        message={`${firstName} ${lastName} has been registered`}
        isOpen={isSuccessModalOpen}
        onClose={()=>{

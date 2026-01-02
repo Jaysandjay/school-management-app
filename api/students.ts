@@ -1,4 +1,8 @@
-import { Student } from "@/types/Student"
+import { Address, AddressRecord } from "@/types/Address"
+import { GuardianRelationship } from "@/types/GuardianRelationship"
+import { Student, StudentRecord } from "@/types/Student"
+import { StudentGuardian } from "@/types/StudentGuardian"
+import { METHODS } from "http"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -11,12 +15,12 @@ export async function fetchStudents() {
     const data = await res.json()
     const students = data.map((student: any) => ({
         ...student,
-        date_of_birth: student.date_of_birth ?
-        new Date(student.date_of_birth).toISOString().slice(0, 10)
+        dateOfBirth: student.dateOfBirth ?
+        new Date(student.dateOfBirth).toISOString().slice(0, 10)
         :null
     }))
 
-    console.log(students)
+    console.log("fetchStudents", students)
     return students
 }
 
@@ -29,4 +33,97 @@ export async function addStudent(student:Student) {
     })
     if(!res.ok) throw new Error("Error adding Student")
     console.log("Student Added", student)
+}
+
+export async function getStudent(id: number){
+    console.log("Getting Student...")
+    const res = await fetch(`${API_URL}/students/${id}`)
+    if(!res.ok) throw new Error("Error getting Student")
+    let student = await res.json()
+    student.dateOfBirth = new Date(student.dateOfBirth).toISOString().slice(0, 10)
+    console.log("getStudent", student)
+    return student
+}
+
+export async function updateStudent(id: number, student: Student){  
+    console.log("Updating Student...")
+    const res = await fetch(`${API_URL}/students/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(student)
+    })
+    if(!res.ok) throw new Error("Error updating student")
+    console.log('Student Updated', student)
+}
+
+export async function getStudentEnrollments(id: number){
+    console.log("Getting Enrollments")
+    const res = await fetch(`${API_URL}/enrollments/student/${id}`)
+    if(!res.ok) throw new Error("Error getting enrollments")
+    const classes = await res.json()
+    console.log("getStudentEnrollments", classes)
+    return classes
+}
+
+export async function getStudentAddress(id:number) {
+    console.log("Getting Address")
+    const res = await fetch(`${API_URL}/students/${id}/address`)
+    if(!res.ok) throw new Error("Error getting address")
+    const address = await res.json()
+    console.log("getStudentAddress", address)
+    return address
+}
+
+export async function addStudentAddress(id: number, address: Address){
+    console.log(`Creating Address...`)
+    const res = await fetch(`${API_URL}/students/${id}/address`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(address)
+    })
+    if(!res.ok) throw new Error("Error adding address")
+    console.log("Address added", address)
+}
+
+export async function updateStudentAddress(id: number, address: Address){  
+    console.log("Updating Student...")
+    const res = await fetch(`${API_URL}/students/${id}/address`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(address)
+    })
+    if(!res.ok) throw new Error("Error updating address")
+    console.log('Address Updated', address)
+}
+
+export async function getStudentGuardians(id: number) {
+    console.log("Getting Student's Guardian...")
+    const res = await fetch(`${API_URL}/students/${id}/guardian`)
+    if(!res.ok) throw new Error("Error getting student's guardians")
+    const data = await res.json()
+    console.log("getStudentGuardians", data)
+    return data
+}
+
+export async function assignStudentGuardian(studentGuardianInfo: StudentGuardian) {
+    const {studentId, guardianId, relationship} = studentGuardianInfo
+    console.log("Assigning Guardian...")
+    const res = await fetch(`${API_URL}/students/${studentId}/guardian`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({guardianId: guardianId, relationship: relationship})
+    })
+    if(!res.ok) throw new Error("Error assigining Guardian")
+    console.log(`Guardian ${guardianId} assigned to student ${studentId} with relationship: ${relationship}`)
+}
+
+export async function removeStudentGuardian(studentId: number, guardianId: number) {
+    console.log("Removing Guardian.....")
+    const res = await fetch(`${API_URL}/students/${studentId}/guardian`, {
+        method: "DELETE",
+        headers: {"Content-Type": "Application/json"},
+        body: JSON.stringify({gurdianId: guardianId})
+    })
+    if(!res.ok) throw new Error("Error removing guardian from student")
+    console.log(`Guardian ${guardianId} removed from student ${studentId}`)
 }

@@ -1,3 +1,5 @@
+import BasicModalContainer from "./BasicModalContainer";
+
 interface SuccessModalProps {
     title: string
   message: string;
@@ -9,8 +11,8 @@ export default function SuccessModal({title, message, isOpen, onClose }: Success
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-80 max-w-full text-center border border-green-500">
+
+    <BasicModalContainer>
         <h2 className="text-xl font-semibold mb-4 text-green-600">{title}</h2>
         <p className="mb-6">{message}</p>
         <button
@@ -19,7 +21,7 @@ export default function SuccessModal({title, message, isOpen, onClose }: Success
         >
           Close
         </button>
-      </div>
-    </div>
+    </BasicModalContainer>
+   
   );
 }

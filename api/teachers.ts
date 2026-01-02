@@ -23,3 +23,22 @@ export async function addTeacher(teacher: Teacher) {
     if(!res.ok) throw new Error("Error adding teacher")
     console.log("Teacher Added", teacher)
 }
+
+export async function getTeacher(id:number) {
+    console.log("Getting Teacher...")
+    const res = await fetch(`${API_URL}/teachers/${id}`)
+    if(!res.ok) throw new Error("Error getting teacher")
+    const teacher = await res.json()
+    return teacher
+}
+
+export async function updateTeacher(id: number, teacher: Teacher){  
+    console.log("Updating Teacher...")
+    const res = await fetch(`${API_URL}/teachers/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(teacher)
+    })
+    if(!res.ok) throw new Error("Error updating teacher")
+    console.log('Teacher Updated', teacher)
+}

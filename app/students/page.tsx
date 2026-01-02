@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import Table from "../components/ui/Table"
 import { fetchStudents } from "@/api/students"
 import PageTitle from "../components/ui/PageTitle"
+import LoadingSpinner from "../components/ui/LoadingSpinner"
 
 export default function StudentPage() {
 
@@ -12,27 +13,28 @@ export default function StudentPage() {
         queryFn: fetchStudents
     })
     const columns = [
-            { key: "student_id", label: "ID" },
-            { key: "first_name", label: "First Name" },
-            { key: "last_name", label: "Last Name" },
-            { key: "date_of_birth", label: "D.O.B" },
-            { key: "grade_level", label: "Grade Level" },
+            { key: "studentId", label: "ID" },
+            { key: "firstName", label: "First Name" },
+            { key: "lastName", label: "Last Name" },
+            { key: "dateOfBirth", label: "D.O.B" },
+            { key: "gradeLevel", label: "Grade Level" },
             ]
+    if (isLoading) return <LoadingSpinner/>
+    if (isError) return <p>Error: {(error as Error).message}</p>
+    if (!data) return <p>No student found</p>
 
 
     return (
         <div>
             <PageTitle title="Student Record"/>
-            {isError && <p>Error..</p>}
-            {isLoading ? <p>Loading...</p>:
 
             <Table
             columns={columns}
             rows={data}
-            urls="/student"
-            idField="student_id"
+            urls="/students"
+            idField="studentId"
             />
-            }
+
         </div>
     )
 }

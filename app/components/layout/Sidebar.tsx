@@ -12,19 +12,31 @@ export default function Sidebar() {
         <Link href="/">Dashboard</Link>
         <DropdownFolder 
         title="Students"
-        links={[{name: "Student Records", href: "/students"}, {name: "Add Student", href: "/students/add"} ]}
+        links={[
+          {name: "Student Records", href: "/students"}, 
+          {name: "Add Student", href: "/students/add"} 
+        ]}
         />
         <DropdownFolder 
         title="Teachers"
-        links={[{name: "Teacher Records", href: "/teachers"} ]}
+        links={[
+          {name: "Teacher Records", href: "/teachers"},
+          {name: "Add Teacher", href: "/teachers/add"} 
+         ]}
         />
         <DropdownFolder 
         title="Classes"
-        links={[{name: "Class Records", href: "/classes"} ]}
+        links={[{
+          name: "Class Records", href: "/classes"},
+          {name: "Add Class", href: "/classes/add"}  
+        ]}
         />
         <DropdownFolder 
         title="Guardians"
-        links={[{name: "Guardian Records", href: "/guardians"} ]}
+        links={[
+          {name: "Guardian Records", href: "/guardians"},
+          {name: "Add Guardian", href: "/guardians/add"}  
+        ]}
         />
       </nav>
     </aside>

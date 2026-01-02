@@ -12,8 +12,9 @@ export default function ClassesPage() {
         queryFn: fetchClasses
     })
     const columns = [
-            { key: "class_id", label: "ID" },
-            { key: "class_name", label: "Name" }
+            { key: "classId", label: "ID" },
+            { key: "className", label: "Name" },
+            { key: "teacherId", label: "Teacher"}
             ]
 
     return (
@@ -26,7 +27,7 @@ export default function ClassesPage() {
             columns={columns}
             rows={data}
             urls="/classes"
-            idField="class_id"
+            idField="classId"
             />
             }
         </div>

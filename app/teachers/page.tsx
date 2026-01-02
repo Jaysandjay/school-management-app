@@ -12,9 +12,9 @@ export default function TeachersPage() {
         queryFn: fetchTeachers
     })
     const columns = [
-            { key: "teacher_id", label: "ID" },
-            { key: "first_name", label: "First Name" },
-            { key: "last_name", label: "Last Name" },
+            { key: "teacherId", label: "ID" },
+            { key: "firstName", label: "First Name" },
+            { key: "lastName", label: "Last Name" },
             { key: "email", label: "Email" },
             { key: "phone", label: "Phone" },
             ]
@@ -29,8 +29,8 @@ export default function TeachersPage() {
             <Table
             columns={columns}
             rows={data}
-            urls="/teacher"
-            idField="teacher_id"
+            urls="/teachers"
+            idField="teacherId"
             />
             }
         </div>

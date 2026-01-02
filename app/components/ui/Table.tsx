@@ -1,20 +1,29 @@
-import { Data } from "@/types/Data"
+
+import Link from "next/link"
 import PrimaryButton from "./PrimaryButton"
 import { useState } from "react"
 
 interface Column<RowType>{
     key: keyof RowType
-    label: string
+    label: string,
+  }
+  interface nameObj{
+  key: string,
+  names: string[]
 }
 
 interface TableProps<RowType extends object>{
-    columns: Column<RowType>[],
-    rows: RowType[],
-    urls: string,
-    idField: keyof RowType
+  columns: readonly Column<RowType>[],
+  rows: readonly RowType[],
+  urls: string,
+  idField: keyof RowType,
+  getName?: nameObj[],
+  button?: (row: RowType) => void,
+  addButtonTitle: string,
+  addButtonColor?: string
 }
 
-export default function Table<RowType extends object>({columns, rows, urls, idField }: TableProps<RowType>){
+export default function Table<RowType extends object>({addButtonColor="bg-green-600", addButtonTitle, button: addButtonOnClick, columns, rows, urls, idField, getName }: TableProps<RowType>){
     const [search, setSearch] = useState("")
     const [activeColumn, setActiveColumn] = useState<keyof RowType>(columns[1].key)
 
@@ -78,10 +87,12 @@ export default function Table<RowType extends object>({columns, rows, urls, idFi
                   </td>
                 ))}
                 <td className="px-4 py-3">
-                  <PrimaryButton
-                    href={`${urls}/${row[idField]}`}
-                    title="View"
-                  />
+                  <div className="flex justify-between ">
+                    <Link href={`${urls}/${row[idField]}`}>
+                    <PrimaryButton title="View"/>
+                    </Link>
+                    {addButtonOnClick && <PrimaryButton color={addButtonColor} title={addButtonTitle} onclick={() => addButtonOnClick(row)}/>}
+                  </div>
                 </td>
               </tr>
             ))}

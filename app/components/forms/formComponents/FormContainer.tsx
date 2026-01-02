@@ -1,4 +1,5 @@
 import { ReactNode } from "react"
+import BasicContainer from "../../ui/BasicContainer"
 
 interface FormContainerProps{
     title: string,
@@ -8,7 +9,8 @@ interface FormContainerProps{
 
 export default function FormContainer({title, children, submit}: FormContainerProps){
     return (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm p-6 w-full max-w-md">
+      <BasicContainer>
+
       <h2 className="text-xl font-semibold mb-4">{title}</h2>
 
       <form onSubmit={submit} className="flex flex-col gap-4">
@@ -17,11 +19,12 @@ export default function FormContainer({title, children, submit}: FormContainerPr
           </div>
           <button
           type="submit"
-          className="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow-sm text-sm font-medium"
-        >
+          className="mt-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow-sm text-sm font-medium"
+          >
           Add
         </button>
         </form>
-        </div>
+        </BasicContainer>
+        
     )
 }

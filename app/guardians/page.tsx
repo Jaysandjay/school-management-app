@@ -12,9 +12,9 @@ export default function GuardiansPage() {
         queryFn: fetchGuardians
     })
     const columns = [
-            { key: "guardian_id", label: "ID" },
-            { key: "first_name", label: "First Name" },
-            { key: "last_name", label: "Last Name" },
+            { key: "guardianId", label: "ID" },
+            { key: "firstName", label: "First Name" },
+            { key: "lastName", label: "Last Name" },
             { key: "email", label: "Email" },
             { key: "phone", label: "Phone" },
             ]
@@ -30,7 +30,7 @@ export default function GuardiansPage() {
             columns={columns}
             rows={data}
             urls="/guardians"
-            idField="guardian_id"
+            idField="guardianId"
             />
             }
         </div>
