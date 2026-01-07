@@ -4,17 +4,24 @@ import FormDropDownInput from "./formComponents/FormDropdownInput"
 import FormInput from "./formComponents/FormInput"
 import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import SuccessModal from "../modals/SuccessModal"
+import SuccessModal from "../modals/ui/SuccessModal"
 import LoadingSpinner from "../ui/LoadingSpinner"
 import { addGuardian } from "@/api/guardians"
 import { Guardian } from "@/types/Guardian"
 
+interface GuardianDetailsFormProps{
+    title: string
+    onSubmit:(guardian: Guardian) => Promise<void>
+    successMessage:(guardian: Guardian) => string
+    currentGuardian?: Guardian
+    toggle?: (values: any) => any
+}
 
-export default function GuardianDetailsForm(){
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [phone, setPhone] = useState("")
-    const [email, setEmail] = useState("")
+export default function GuardianDetailsForm({title, onSubmit, successMessage, currentGuardian, toggle}: GuardianDetailsFormProps){
+    const [firstName, setFirstName] = useState(currentGuardian ? currentGuardian.firstName : "")
+    const [lastName, setLastName] = useState(currentGuardian ? currentGuardian.lastName : "")
+    const [phone, setPhone] = useState(currentGuardian ? currentGuardian.phone : "")
+    const [email, setEmail] = useState(currentGuardian ? currentGuardian.email : "")
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
     const queryClient = useQueryClient()
@@ -40,8 +47,7 @@ export default function GuardianDetailsForm(){
             email
         }
         try {
-            await mutation.mutateAsync(guardian)
-            console.log("Guardian Added", guardian)
+            await onSubmit(guardian)
             setIsSuccessModalOpen(true)
         }catch(err){
             console.error(err)

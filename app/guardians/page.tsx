@@ -21,7 +21,7 @@ export default function GuardiansPage() {
 
 
     return (
-        <div>
+        <div className="flex flex-col h-full">
             <PageTitle title="Guardian Records"/>
             {isError && <p>Error..</p>}
             {isLoading ? <p>Loading...</p>:

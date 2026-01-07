@@ -1,6 +1,6 @@
 import { GuardianRelationship } from "@/types/GuardianRelationship"
 import { useState } from "react"
-import BasicModalContainer from "./BasicModalContainer"
+import BasicModalContainer from "./ui/BasicModalContainer"
 import { Guardian, GuardianRecord } from "@/types/Guardian";
 import FormDropDownInput from "../forms/formComponents/FormDropdownInput";
 import PrimaryButton from "../ui/PrimaryButton";
@@ -15,7 +15,7 @@ interface AssignGuardianModalProps {
     onClose: () => void;
 }
 
-export default function AssignGuardianModal ({guardian, studentId, isOpen, onClose}: AssignGuardianModalProps) {
+export default function AssignGuardianToStudentModal ({guardian, studentId, isOpen, onClose}: AssignGuardianModalProps) {
     const [relationship, setRelationship] = useState<GuardianRelationship>("Mother")
     const [isSuccessfullyAssigned, setIsSuccessfullyAssigned] = useState(false)
       
@@ -66,7 +66,11 @@ export default function AssignGuardianModal ({guardian, studentId, isOpen, onClo
                 />
             )}
             <div>
-                <PrimaryButton title="Close" color="bg-red-600" onclick={onClose}/>
+                <PrimaryButton title="Close" color="bg-red-600" onclick={()=>{
+                    onClose() 
+                    setIsSuccessfullyAssigned(false)}
+                    }
+                />
                 {!isSuccessfullyAssigned && 
                 <PrimaryButton title="Assign" color="bg-green-500" onclick={()=>assignGuardian()}/>
                 }

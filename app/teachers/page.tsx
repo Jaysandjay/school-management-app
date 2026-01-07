@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import Table from "../components/ui/Table"
 import { fetchTeachers } from "@/api/teachers"
 import PageTitle from "../components/ui/PageTitle"
+import TeacherList from "../components/teachers/TeacherList"
 
 export default function TeachersPage() {
 
@@ -21,17 +22,12 @@ export default function TeachersPage() {
         
 
     return (
-        <div>
+        <div className="flex flex-col h-full">3s  +-08743wer
             <PageTitle title="Teacher Records"/>
             {isError && <p>Error..</p>}
             {isLoading ? <p>Loading...</p>:
 
-            <Table
-            columns={columns}
-            rows={data}
-            urls="/teachers"
-            idField="teacherId"
-            />
+            <TeacherList/>
             }
         </div>
     )

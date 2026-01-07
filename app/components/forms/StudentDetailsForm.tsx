@@ -4,7 +4,7 @@ import FormContainer from "./formComponents/FormContainer"
 import FormDropDownInput from "./formComponents/FormDropdownInput"
 import FormInput from "./formComponents/FormInput"
 import { useState } from "react"
-import SuccessModal from "../modals/SuccessModal"
+import SuccessModal from "../modals/ui/SuccessModal"
 import PrimaryButton from "../ui/PrimaryButton"
 
 

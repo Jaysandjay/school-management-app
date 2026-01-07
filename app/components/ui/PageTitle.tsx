@@ -3,7 +3,7 @@ interface PageTitleProps {
 }
 export default function PageTitle({title}: PageTitleProps){
     return (
-        <div className="mb-5 mr-10">
+        <div className="mb-3 mr-10 min-h-0">
             <h1 className="text-2xl">{title}</h1>
         </div>
     )

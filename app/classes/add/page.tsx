@@ -2,7 +2,8 @@
 import ClassDetailsForm from "@/app/components/forms/ClassDetailsForm"
 import FormNavButtons from "@/app/components/navigation/FormNavButtons"
 import PageTitle from "@/app/components/ui/PageTitle"
-import { addCourse } from "@/api/classes"
+import { addclass } from "@/api/classes"
+import { Course } from "@/types/Course"
 export default function addStudentPage(){
 
     return(
@@ -11,7 +12,7 @@ export default function addStudentPage(){
             <PageTitle title="Add Class"/>
             <FormNavButtons/>
             </div>
-            <ClassDetailsForm title="Add Class" mutationFunction={addCourse}/>
+            <ClassDetailsForm title="Add Class" onSubmit={addclass} successMessage={(c: Course) => `${c.className} created`}/>
             
         </div>
     )

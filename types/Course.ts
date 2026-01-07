@@ -2,9 +2,8 @@
 export interface Course {
     className: string,
     gradeLevel: number,
-    capacity?: number,
+    capacity: number,
     numStudents?: number,
-    isFull?: boolean,
     teacherId?: number
 }
 

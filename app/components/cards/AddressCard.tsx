@@ -5,34 +5,53 @@ import LoadingSpinner from "@/app/components/ui/LoadingSpinner"
 import InfoCard from "@/app/components/ui/infoCard"
 import { useState } from "react"
 import AddressForm from "../forms/AddressForm"
-import { Address, AddressRecord } from "@/types/Address"
+import { Address } from "@/types/Address"
+import { addTeacherAddress, getTeacherAddress, updateTeacherAddress } from "@/api/teachers"
+import { addGuardianAddress, getGuardianAddress, updateGuardianAddress } from "@/api/guardians"
 
-interface StudentAddressProps {
-    studentId: number,
+interface AddressCardProps {
+    id: number,
+    personType: "student" | "guardian" | "teacher"
 }
 
-export default function StudentAddress({studentId}: StudentAddressProps){
+export default function AddressCard({id, personType}: AddressCardProps){
     const [isEditingDetails, setIsEditingDetails] = useState(false)
-  
     const queryClient = useQueryClient()
 
+    function getAddress(){
+        switch(personType) {
+            case "student": return getStudentAddress(id)
+            case "teacher": return getTeacherAddress(id)
+            case "guardian": return getGuardianAddress(id)
+        }
+    }
+
     const {data: address, isLoading, isError, error} = useQuery<Address | null>({
-        queryKey: ["student-address", studentId],
-        queryFn: ()=>getStudentAddress(Number(studentId)),
-        enabled: !!studentId
+        queryKey: [personType + "-address", id],
+        queryFn: getAddress,
+        enabled: !!id
     })
     
     
     const mutation = useMutation({
         mutationFn: (updatedAddress: Address) => {
-            if(address){
-               return updateStudentAddress(Number(studentId), updatedAddress)
-            } else {
-                return addStudentAddress(studentId, updatedAddress)
+            switch(personType) {
+                case "student":
+                    return address
+                        ? updateStudentAddress(id, updatedAddress)
+                        : addStudentAddress(id, updatedAddress)
+                case "guardian":
+                    return address
+                        ? updateGuardianAddress(id, updatedAddress)
+                        : addGuardianAddress(id, updatedAddress)
+                case "teacher":
+                    return address
+                        ? updateTeacherAddress(id, updatedAddress)
+                        : addTeacherAddress(id, updatedAddress)
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["student-address", studentId]})
+            queryClient.invalidateQueries({queryKey: [personType + "-address", id]})
             setIsEditingDetails(false)
         }
     })
@@ -48,11 +67,7 @@ export default function StudentAddress({studentId}: StudentAddressProps){
     function toggleEdit(){
         setIsEditingDetails(!isEditingDetails)
     }
-
-    function addressInfo(){
-        if(address) return <InfoCard title="Address" data={basicInfo} toggle={toggleEdit}/>
-        return <InfoCard title="Address" toggle={toggleEdit}/>
-    }
+    console.log("Address",address)
 
 
     return (
@@ -66,7 +81,7 @@ export default function StudentAddress({studentId}: StudentAddressProps){
             toggle={toggleEdit}
             />):
         ( address? <InfoCard title="Address" data={basicInfo} toggle={toggleEdit} isLoading={isLoading}/>:
-        <InfoCard title="Address" toggle={toggleEdit} isLoading={isLoading}/> 
+        <InfoCard title="Address" toggle={toggleEdit}/> 
 
         )}
         {mutation.isPending && <LoadingSpinner/>}

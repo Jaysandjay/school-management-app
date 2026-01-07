@@ -4,26 +4,29 @@ import FormDropDownInput from "./formComponents/FormDropdownInput"
 import FormInput from "./formComponents/FormInput"
 import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import SuccessModal from "../modals/SuccessModal"
+import SuccessModal from "../modals/ui/SuccessModal"
 import LoadingSpinner from "../ui/LoadingSpinner"
 import { Course } from "@/types/Course"
 
 interface ClassDetailsFormProps {
     title: string,
-    mutationFunction: (course: Course) => any
+    onSubmit: (course: Course) => any
+    successMessage: (course: Course) => string
+    currentClass?: Course
+    toggle?: (values: any) => any
 }
 
-export default function ClassDetailsForm({title, mutationFunction}: ClassDetailsFormProps){
-    const [className, setClassName] = useState("")
-    const [capacity, setCapacity] = useState("")
-    const [gradeLevel, setGradeLevel] = useState(9)
+export default function ClassDetailsForm({successMessage, title, onSubmit, currentClass, toggle}: ClassDetailsFormProps){
+    const [className, setClassName] = useState(currentClass? currentClass.className: "")
+    const [capacity, setCapacity] = useState(currentClass? currentClass.capacity.toString(): "")
+    const [gradeLevel, setGradeLevel] = useState(currentClass? currentClass.gradeLevel: 9)
 
     const [isCapacityError, setIsCapacityError] = useState(false)
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
     const queryClient = useQueryClient()
     const mutation = useMutation({
-        mutationFn: mutationFunction,
+        mutationFn: onSubmit,
         onSuccess: () => {queryClient.invalidateQueries({queryKey: ["classes"]})},
         onError:(err)=> console.error(err)
     })
@@ -38,7 +41,6 @@ export default function ClassDetailsForm({title, mutationFunction}: ClassDetails
         e.preventDefault()
         setIsCapacityError(false)
         const parsedCapacity = parseInt(capacity)
-
         if (Number.isNaN(parsedCapacity) || parsedCapacity <= 0) {
             console.error("Capacity must be a positive number")
             setIsCapacityError(true)
@@ -95,7 +97,11 @@ export default function ClassDetailsForm({title, mutationFunction}: ClassDetails
        {mutation.error && "Error Adding Class"}
        <SuccessModal
        title="Class Added"
-       message={`${className} has been registered`}
+       message={successMessage({
+        className,
+        gradeLevel,
+        capacity: parseInt(capacity)
+       })}
        isOpen={isSuccessModalOpen}
        onClose={()=>{
         setIsSuccessModalOpen(false)

@@ -56,13 +56,44 @@ export async function updateStudent(id: number, student: Student){
     console.log('Student Updated', student)
 }
 
-export async function getStudentEnrollments(id: number){
+export async function getStudentClasses(id: number){
     console.log("Getting Enrollments")
-    const res = await fetch(`${API_URL}/enrollments/student/${id}`)
-    if(!res.ok) throw new Error("Error getting enrollments")
+    const res = await fetch(`${API_URL}/students/${id}/classes`)
+    if(!res.ok) throw new Error("Error getting students classes")
     const classes = await res.json()
     console.log("getStudentEnrollments", classes)
     return classes
+}
+
+export async function getAvailableStudentClasses(id: number){
+    console.log(`Getting available classes for student ${id}...`)
+    const res = await fetch(`${API_URL}/students/${id}/classes/available`)
+    if(!res.ok) throw new Error("Error getting student available classes")
+    const classes = await res.json()
+    console.log("getAvailableStudentClasses", classes)
+    return classes
+}
+
+export async function unenrollStudent(studentId: number, classId: number) {
+    console.log("Unenrolling from class...")
+    const res = await fetch(`${API_URL}/students/${studentId}/enrollment`, {
+        method: "DELETE",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({classId: classId})
+    })
+    if(!res.ok) throw new Error("Error unenrolling class")
+    console.log(`Student ${studentId} unenrolled from class ${classId}`)
+}
+
+export async function enrollStudent(studentId: number, classId: number) {
+    console.log("Enrolling class...")
+    const res = await fetch(`${API_URL}/students/${studentId}/enrollment`, {
+        method: "POST",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({classId: classId})
+    })
+    if(!res.ok) throw new Error("Error unenrolling class")
+    console.log(`Student ${studentId} unenrolled from class ${classId}`)
 }
 
 export async function getStudentAddress(id:number) {
@@ -105,6 +136,14 @@ export async function getStudentGuardians(id: number) {
     return data
 }
 
+export async function getAvailableStudentGuardians(studentId: number) {
+    console.log(`Getting available guardians for student ${studentId}...`)
+    const res = await fetch(`${API_URL}/students/${studentId}/guardian/available`)
+    if(!res.ok) throw new Error("Error getting student available guardians")
+    const guardians = await res.json()
+    return guardians
+}
+
 export async function assignStudentGuardian(studentGuardianInfo: StudentGuardian) {
     const {studentId, guardianId, relationship} = studentGuardianInfo
     console.log("Assigning Guardian...")
@@ -122,7 +161,7 @@ export async function removeStudentGuardian(studentId: number, guardianId: numbe
     const res = await fetch(`${API_URL}/students/${studentId}/guardian`, {
         method: "DELETE",
         headers: {"Content-Type": "Application/json"},
-        body: JSON.stringify({gurdianId: guardianId})
+        body: JSON.stringify({guardianId: guardianId})
     })
     if(!res.ok) throw new Error("Error removing guardian from student")
     console.log(`Guardian ${guardianId} removed from student ${studentId}`)

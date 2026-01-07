@@ -2,11 +2,8 @@
 import FormContainer from "./formComponents/FormContainer"
 import FormInput from "./formComponents/FormInput"
 import { useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import SuccessModal from "../modals/SuccessModal"
-import LoadingSpinner from "../ui/LoadingSpinner"
+import SuccessModal from "../modals/ui/SuccessModal"
 import { Teacher } from "@/types/Teacher"
-import { addTeacher } from "@/api/teachers"
 import PrimaryButton from "../ui/PrimaryButton"
 
 interface TeacherDetailsFormProps {

@@ -21,7 +21,7 @@ export default function FormContainer({title, children, submit}: FormContainerPr
           type="submit"
           className="mt-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow-sm text-sm font-medium"
           >
-          Add
+          Submit
         </button>
         </form>
         </BasicContainer>

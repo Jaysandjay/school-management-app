@@ -1,0 +1,84 @@
+import { useState } from "react"
+import BasicModalContainer from "./ui/BasicModalContainer"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {  enrollStudent } from "@/api/students";
+import PrimaryButton from "../ui/PrimaryButton";
+import { CourseRecord } from "@/types/Course";
+import { assignClassTeacher, removeClassTeacher } from "@/api/classes";
+import { TeacherRecord } from "@/types/Teacher";
+
+interface RemoveTeacherFromClassModalProps {
+    teacher: TeacherRecord,
+    classId: number,
+    isOpen: boolean,
+    onClose: () => void;
+}
+
+interface AssignVariables {
+    classId: number
+}
+
+export default function RemoveTeacherFromClassModal ({classId, teacher, isOpen, onClose}: RemoveTeacherFromClassModalProps) {
+    const [isSuccessfullyRemoved, setIsSuccessfullyRemoved] = useState(false)
+    const queryClient = useQueryClient()
+    
+    const mutation = useMutation({
+    mutationFn: ({classId}: AssignVariables) => removeClassTeacher(classId),
+    onSuccess: () => queryClient.invalidateQueries({queryKey: ["class-teacher", classId]}),
+    })
+    
+    async function AssignTeacher(){
+        try {
+            await mutation.mutateAsync({classId})
+            setIsSuccessfullyRemoved(true)
+        }catch(err){
+            console.error(err)
+        }
+    }
+    
+    if(!isOpen) return null
+
+    return (
+        <BasicModalContainer >
+             {teacher ? (
+            <>
+
+            {isSuccessfullyRemoved ? (
+                <h2>Successfully Removed!</h2>
+            ) : (
+                <h2>Are you sure you want to remove {teacher.firstName} {teacher.lastName} from class?</h2>
+            )}
+
+            <div>
+                {isSuccessfullyRemoved ? (
+                <PrimaryButton
+                    title="Close"
+                    color="bg-slate-500"
+                    onclick={() => {
+                        onClose()
+                        setIsSuccessfullyRemoved(false)
+                    }}
+                />
+                ) : (
+                <>
+                    <PrimaryButton
+                    title="Cancel"
+                    color="bg-slate-500"
+                    onclick={onClose}
+                
+                    />
+                    <PrimaryButton
+                    title="Remove"
+                    color="bg-green-600"
+                    onclick={AssignTeacher}
+                    />
+                </>
+                )}
+            </div>
+            </>
+        ) : (
+            <h1>Error, Teacher not found</h1>
+        )}
+        </BasicModalContainer>
+    )
+}

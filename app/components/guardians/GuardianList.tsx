@@ -5,7 +5,10 @@ import { fetchGuardians } from "@/api/guardians"
 import LoadingSpinner from "../ui/LoadingSpinner"
 import { useState } from "react"
 import { GuardianRecord } from "@/types/Guardian"
-import AssignGuardianModal from "../modals/AssignGuardianModal"
+import AssignGuardianModal from "../modals/AssignGuardianToStudentModal"
+import { getAvailableStudentGuardians } from "@/api/students"
+import EmptyMessage from "../cards/EmptyMessage"
+import AssignGuardianToStudentModal from "../modals/AssignGuardianToStudentModal"
 
 interface GuradianListProps {
     studentId?: number,
@@ -14,10 +17,14 @@ interface GuradianListProps {
 export default function GuardianList({studentId}: GuradianListProps) {
     const [isAssigningGuardian, setIsAssigningGuardian] = useState(false)
     const [selectedGuardian, setSelectedGuardian] = useState<GuardianRecord | null>(null)
-
     const {data: guardians = [], isLoading, isError, error} = useQuery<GuardianRecord[]>({
-        queryKey:["guardian"],
-        queryFn: fetchGuardians
+        queryKey: studentId 
+        ? ["student-guardians", studentId] 
+        : ["guardians"],
+        queryFn: () =>
+            studentId
+                ? getAvailableStudentGuardians(studentId)
+                : fetchGuardians(),
     })
 
     const columns = [
@@ -40,7 +47,7 @@ export default function GuardianList({studentId}: GuradianListProps) {
                 rows={guardians}
                 urls="/guardians"
                 idField="guardianId"
-                button={(row)=>{
+                addButtonOnClick={(row)=>{
                         setSelectedGuardian(row)
                         setIsAssigningGuardian(true)
                         }}
@@ -48,12 +55,10 @@ export default function GuardianList({studentId}: GuradianListProps) {
                 />
 
             ): (
-                <div className="w-full flex justify-center h-50 items-center">
-                    <h3 className="text-red-600">No registered Guardians</h3>
-                </div>
+                <EmptyMessage message="No registeredGuardians"/>
             )}
             {selectedGuardian && studentId &&
-                <AssignGuardianModal 
+                <AssignGuardianToStudentModal 
                 isOpen={isAssigningGuardian} guardian={selectedGuardian} 
                 studentId={studentId} 
                 onClose={()=>setIsAssigningGuardian(false)}/>

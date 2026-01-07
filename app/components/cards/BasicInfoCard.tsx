@@ -1,0 +1,166 @@
+"use client"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { getStudent, updateStudent } from "@/api/students"
+import { Student, StudentRecord } from "@/types/Student"
+import LoadingSpinner from "@/app/components/ui/LoadingSpinner"
+import InfoCard from "@/app/components/ui/infoCard"
+import { ReactNode, useState } from "react"
+import StudentDetailsForm from "@/app/components/forms/StudentDetailsForm"
+import { getTeacher, updateTeacher } from "@/api/teachers"
+import { getGuardian, updateGuardian } from "@/api/guardians"
+import { Teacher, TeacherRecord } from "@/types/Teacher"
+import { Guardian, GuardianRecord } from "@/types/Guardian"
+import TeacherDetailsForm from "../forms/TeacherDetailsForm"
+import GuardianDetailsForm from "../forms/GuardianDetailsForm"
+import { Course, CourseRecord } from "@/types/Course"
+import { getClass, updateClass } from "@/api/classes"
+import ClassDetailsForm from "../forms/ClassDetailsForm"
+
+interface BasicInfoCardProps {
+    id: number 
+    type: "student" | "teacher" | "guardian" |"class"
+    isForm?: boolean,
+    infoCardChildren?: ReactNode
+    toggle?: (values: any) => any
+}
+
+export default function BasicInfoCard({toggle, infoCardChildren, id, type: type, isForm=true}: BasicInfoCardProps){
+    const [isEditingDetails, setIsEdtiingDetails] = useState(false)
+    const queryClient = useQueryClient()
+
+    function getPerson(){
+        switch(type) {
+            case "student": return getStudent(id)
+            case "teacher": return getTeacher(id)
+            case "guardian": return getGuardian(id)
+            case "class": return getClass(id)
+        }
+    }
+
+
+    const {data, isLoading, isError, error} = useQuery({
+        queryKey: [type, id],
+        queryFn: getPerson,
+        enabled: !!id
+    })
+
+    const mutation = useMutation({
+        mutationFn: (updatedData: any) => {
+            switch(type){
+                case "student": return updateStudent(id, updatedData as Student)
+                case "teacher": return updateTeacher(id, updatedData as Teacher)
+                case "guardian": return updateGuardian(id, updatedData as Guardian)
+                case "class": return updateClass(id, updatedData as Course)
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: [type, id]})
+            queryClient.invalidateQueries({queryKey: [type + "s"]})
+            setIsEdtiingDetails(false)
+        }
+    })
+    let basicInfo: Record<string, any> = {}
+    if(data){
+        switch(type){
+            case "student":
+                const student: StudentRecord = data as StudentRecord
+                basicInfo = {
+                    "First Name:": student.firstName,
+                    "Last Name:": student.lastName,
+                    "D.O.B: ": student.dateOfBirth,
+                    "Grade Level: ": student.gradeLevel
+                }
+                break
+            case "guardian":
+                const guardian: GuardianRecord = data as GuardianRecord
+                basicInfo = {
+                    "First Name": guardian.firstName,
+                    "Last Name": guardian.lastName,
+                    "Phone": guardian.phone,
+                    "Email": guardian.email
+                }
+                break
+            case "teacher":
+                const teacher: TeacherRecord = data as TeacherRecord
+                basicInfo = {
+                    "First Name": teacher.firstName,
+                    "Last Name": teacher.lastName,
+                    "Phone": teacher.phone,
+                    "Email": teacher.email
+                }
+                break
+            case "class": 
+                const course: CourseRecord = data as CourseRecord
+                basicInfo = {
+                    "Class Name": course.className,
+                    "Grade Level": course.gradeLevel,
+                    "Students Enrolled": course.numStudents,
+                    "Capacity": course.capacity
+                }
+
+        }
+    }
+
+
+    function toggleEdit(){
+        setIsEdtiingDetails(!isEditingDetails)
+    }
+
+
+    return (
+        <>
+        {isForm ? (
+            isEditingDetails ? (
+                <>
+                        {type === "student" && data && (
+                            <StudentDetailsForm
+                                title="Edit Student"
+                                currentStudent={data as StudentRecord}
+                                onSubmit={async updated => await mutation.mutateAsync(updated)}
+                                successMessage={s => `Details have been edited`}
+                                toggle={toggleEdit}
+                            />
+                        )}
+                        {type === "guardian" && data && (
+                            <GuardianDetailsForm
+                                title="Edit Guardian"
+                                currentGuardian={data as GuardianRecord}
+                                onSubmit={async updated => await mutation.mutateAsync(updated)}
+                                successMessage={s => `Details have been edited`}
+                                toggle={toggleEdit}
+                            />
+                        )}
+                        {type === "teacher" && data && (
+                            <TeacherDetailsForm
+                                title="Edit Teacher"
+                                currentTeacher={data as TeacherRecord}
+                                onSubmit={async updated => await mutation.mutateAsync(updated)}
+                                successMessage={s => `Details have been edited`}
+                                toggle={toggleEdit}
+                            />
+                        )}
+                        {type === "class" && data && (
+                            <ClassDetailsForm
+                                title="Edit Teacher"
+                                currentClass={data as CourseRecord}
+                                onSubmit={async updated => await mutation.mutateAsync(updated)}
+                                successMessage={s => `Details have been edited`}
+                                toggle={toggleEdit}
+                            />
+                        )}
+                    </>):(
+                        <>
+                        <InfoCard title={`${type.charAt(0).toUpperCase() + type.slice(1)} Details`} data={basicInfo} toggle={toggleEdit} isLoading={isLoading}/>
+                        {mutation.isPending && <LoadingSpinner/>}
+                        </>
+                    )
+
+        ):(
+            <>
+            <InfoCard title={`${type.charAt(0).toUpperCase() + type.slice(1)} Details`} toggle={toggle}  data={basicInfo} isLoading={isLoading} buttonTitle="View"/>
+            {mutation.isPending && <LoadingSpinner/>}
+            </>
+        )}
+        </>
+    )
+}

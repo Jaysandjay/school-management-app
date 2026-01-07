@@ -1,6 +1,6 @@
 import { useState } from "react"
-import BasicModalContainer from "./BasicModalContainer"
-import { Guardian, GuardianRecord } from "@/types/Guardian";
+import BasicModalContainer from "./ui/BasicModalContainer"
+import { GuardianRecord } from "@/types/Guardian";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeStudentGuardian } from "@/api/students";
 import PrimaryButton from "../ui/PrimaryButton";
@@ -8,9 +8,8 @@ import { StudentGuardian } from "@/types/StudentGuardian";
 import { getGuardian } from "@/api/guardians";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
-interface RemoveGuardianModalProps {
+interface RemoveGuardianFromStudentModalProps {
     guardianRelation: StudentGuardian,
-    studentId: number,
     isOpen: boolean,
     onClose: () => void;
 }
@@ -20,15 +19,16 @@ interface RemoveGuardianVariables {
     guardianId: number
 }
 
-export default function RemoveGuardianModal ({guardianRelation, studentId, isOpen, onClose}: RemoveGuardianModalProps) {
+export default function RemoveGuardianFromStudentModal ({guardianRelation, isOpen, onClose}: RemoveGuardianFromStudentModalProps) {
     const [isSuccessfullyRemoved, setIsSuccessfullyRemoved] = useState(false)
     const guardianId = guardianRelation.guardianId
+    const studentId = guardianRelation.studentId
     const queryClient = useQueryClient()
 
-    const {data: guardian, isLoading, isError, error} = useQuery<Guardian>({
+    const {data: guardian, isLoading, isError, error} = useQuery<GuardianRecord>({
         queryKey: ["guardian", guardianId],
         queryFn: ()=>getGuardian(guardianId),
-        enabled: typeof guardianId === "number"
+        enabled: !!studentId
     })
     
     const mutation = useMutation({
@@ -47,6 +47,7 @@ export default function RemoveGuardianModal ({guardianRelation, studentId, isOpe
         }
     }
     
+ 
     
     
     if(isLoading) return <LoadingSpinner/>
@@ -67,11 +68,14 @@ export default function RemoveGuardianModal ({guardianRelation, studentId, isOpe
             )}
 
             <div>
-                {!isSuccessfullyRemoved ? (
+                {isSuccessfullyRemoved ? (
                 <PrimaryButton
                     title="Close"
                     color="bg-slate-500"
-                    onclick={onClose}
+                    onclick={() => {
+                        onClose()
+                        setIsSuccessfullyRemoved(false)
+                    }}
                 />
                 ) : (
                 <>
@@ -79,6 +83,7 @@ export default function RemoveGuardianModal ({guardianRelation, studentId, isOpe
                     title="Cancel"
                     color="bg-slate-500"
                     onclick={onClose}
+                
                     />
                     <PrimaryButton
                     title="Remove"

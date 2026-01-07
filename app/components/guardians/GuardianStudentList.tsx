@@ -1,26 +1,25 @@
 "use client"
 import { useQuery } from "@tanstack/react-query"
-import {  getStudentGuardians } from "@/api/students"
 import LoadingSpinner from "@/app/components/ui/LoadingSpinner"
 import { useState } from "react"
 import Table from "../ui/Table"
-import RemoveGuardianModal from "../modals/RemoveGuardianFromStudentModal"
 import { StudentGuardianView } from "@/types/StudentGuardianView"
 import EmptyMessage from "../cards/EmptyMessage"
-import RemoveGuardianFromStudentModal from "../modals/RemoveGuardianFromStudentModal"
+import { getGuardianStudents } from "@/api/guardians"
+import RemoveStudentFromGuardianModal from "../modals/RemoveStudentFromGuardianModal"
 
-interface StudentGuardianListProps {
+interface GuardianStudentListProps {
     id: number
 }
 
-export default function StudentGuardiansList({id}: StudentGuardianListProps){
-    const [isRemovingGuardian, setIsRemovingGuardian] = useState(false)
-    const [selectedGuardian, setSelectedGuardian] = useState<StudentGuardianView | null>(null)
+export default function GuardianStudentList({id}: GuardianStudentListProps){
+    const [isRemovingStudent, setIsRemovingStudent] = useState(false)
+    const [selectedStudent, setSelectedStudent] = useState<StudentGuardianView | null>(null)
 
-
+    console.log(selectedStudent)
     const {data: studentGuardians = [], isLoading, isError, error} = useQuery<StudentGuardianView[]>({
-        queryKey: ["student-guardians", id],
-        queryFn: ()=>getStudentGuardians(Number(id)),
+        queryKey: ["guardian-students", id],
+        queryFn: ()=>getGuardianStudents(id),
         enabled: !!id
     })
 
@@ -41,11 +40,11 @@ export default function StudentGuardiansList({id}: StudentGuardianListProps){
                 <Table
                 columns={studentGuardianscolumns}
                 rows={studentGuardians}
-                urls="/guardians"
-                idField="guardianId"
+                urls="/students"
+                idField="studentId"
                 addButtonOnClick={(row) => {
-                    setSelectedGuardian(row)
-                    setIsRemovingGuardian(true)
+                    setSelectedStudent(row)
+                    setIsRemovingStudent(true)
 
                 }}
                 addButtonColor="bg-red-600"
@@ -54,14 +53,15 @@ export default function StudentGuardiansList({id}: StudentGuardianListProps){
                 searchBar={false}
                 />          
             ):
-            <EmptyMessage message="No guardians assigned"/>
+            <EmptyMessage message="No students assigned"/>
     
         }
-        {selectedGuardian && 
-            <RemoveGuardianFromStudentModal
-            isOpen={isRemovingGuardian}
-            guardianRelation={selectedGuardian}
-            onClose={() => setIsRemovingGuardian(false)}
+        {selectedStudent && 
+            <RemoveStudentFromGuardianModal
+            isOpen={isRemovingStudent}
+            guardianId={id}
+            studentId={selectedStudent.studentId}
+            onClose={() => setIsRemovingStudent(false)}
             />        
         }
         </>
