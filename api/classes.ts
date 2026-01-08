@@ -117,3 +117,13 @@ export async function getClassGrades(id: number) {
     console.log(`Class Grades`, grades)
     return grades
 }
+
+export async function deleteClass(id: number){
+    console.log("Deleting class...")
+    const res = await fetch(`${API_URL}/classes/${id}`, {
+        method: "DELETE",
+    })
+    if(!res.ok) throw new Error("Error deleting class")
+    console.log("Class deleted")
+
+}

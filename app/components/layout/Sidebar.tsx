@@ -3,7 +3,7 @@ import DropdownFolder from "../ui/DropdownFolder"
 
 export default function Sidebar() {
   return (
-    <aside className="min-w-15 h-screen text-white bg-linear-to-b from-blue-600 to-blue-100">
+    <aside className="w-70 h-screen text-white bg-linear-to-b from-blue-600 to-blue-100">
         <div className="w-full h-10 flex justify-center items-center mb-3 border-b-black border-b">
             <h1 className="text-xl font-bold">School App</h1>
         </div>
@@ -14,28 +14,28 @@ export default function Sidebar() {
         title="Students"
         links={[
           {name: "Records", href: "/students"}, 
-          {name: "Add Student", href: "/students/add"} 
+          {name: "Add", href: "/students/add"} 
         ]}
         />
         <DropdownFolder 
         title="Teachers"
         links={[
           {name: "Records", href: "/teachers"},
-          {name: "Add Teacher", href: "/teachers/add"} 
+          {name: "Add", href: "/teachers/add"} 
          ]}
         />
         <DropdownFolder 
         title="Classes"
         links={[{
           name: "Records", href: "/classes"},
-          {name: "Add Class", href: "/classes/add"}  
+          {name: "Add", href: "/classes/add"}  
         ]}
         />
         <DropdownFolder 
         title="Guardians"
         links={[
           {name: "Records", href: "/guardians"},
-          {name: "Add Guardian", href: "/guardians/add"}  
+          {name: "Add", href: "/guardians/add"}  
         ]}
         />
       </nav>

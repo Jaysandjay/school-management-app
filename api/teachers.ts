@@ -83,3 +83,12 @@ export async function addTeacherAddress(teacherId: number, address: Address){
     if(!res.ok) throw new Error("Error adding address")
     console.log("Address added", address)
 }
+
+export async function deleteTeacher(id: number){
+    console.log("Deleting teacher...")
+    const res = await fetch(`${API_URL}/teachers/${id}`, {
+        method: "DELETE",
+    })
+    if(!res.ok) throw new Error("Error deleting teacher")
+    console.log("Teacher deleted")
+}

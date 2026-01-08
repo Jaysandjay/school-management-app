@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query"
 import Table from "../components/ui/Table"
 import { fetchGuardians } from "@/api/guardians"
 import PageTitle from "../components/ui/PageTitle"
+import LoadingSpinner from "../components/ui/LoadingSpinner"
+import EmptyMessage from "../components/cards/EmptyMessage"
 
 export default function GuardiansPage() {
 
@@ -19,19 +21,24 @@ export default function GuardiansPage() {
             { key: "phone", label: "Phone" },
             ]
 
+    if(isLoading) return <LoadingSpinner/>
 
     return (
         <div className="flex flex-col h-full">
             <PageTitle title="Guardian Records"/>
             {isError && <p>Error..</p>}
-            {isLoading ? <p>Loading...</p>:
+            {data.length != 0 ? (
+                <Table
+                columns={columns}
+                rows={data}
+                urls="/guardians"
+                idField="guardianId"
+                />
+            ):(
+                <EmptyMessage message = "No guardians"/>
+            )
 
-            <Table
-            columns={columns}
-            rows={data}
-            urls="/guardians"
-            idField="guardianId"
-            />
+
             }
         </div>
     )

@@ -1,14 +1,59 @@
+"use client"
+import { useRouter } from "next/navigation"
+import PrimaryButton from "./PrimaryButton"
+import { useQuery } from "@tanstack/react-query"
+import { fetchClasses } from "@/api/classes"
+import { fetchStudents } from "@/api/students"
+import { fetchTeachers } from "@/api/teachers"
+import { fetchGuardians } from "@/api/guardians"
 
 interface StatCardPops {
     title: string
+    type: "student" | "teacher" | "guardian" | "class"
 }
 
-export default function StatsCard({title}: StatCardPops){
+export default function StatsCard({title, type}: StatCardPops){
+    const router = useRouter()
+
+    function getQueryFn(){
+        switch(type){
+            case "student": return fetchStudents()
+            case "teacher": return fetchTeachers()
+            case "guardian": return fetchGuardians()
+            case "class": return fetchClasses
+            ()
+        }
+    }
+
+    const {data=[], isLoading, isError, error} = useQuery({
+        queryKey: [type === "class"? `classes`: type + "s"],
+        queryFn: ()=>getQueryFn(),
+    })
+
+    function pushRoute(){
+        if(type === "class"){
+            router.push("/classes")
+        }
+        router.push(`/${type}s`)
+    }
+    function getAmountType(){
+        switch(type){
+            case "student": return "Enrolled:"
+            case "teacher": return "Employed:"
+            case "guardian": return "Registered:"
+            case "class": return "Available:" 
+        }
+    }
 
     return (
-        <div className="bg-white shadow p-4 rounded">
-            <h2 className="text-lg text-black font-bold">{title}</h2>
-            <p className="text-2xl text-purple-600 mt-2">124</p>
+        <div className="min-w-100 min-h-50 m-5 bg-blue-100 shadow-lg p-4 rounded flex flex-col items-center gap-4">
+            <h2 className="text-2xl text-black font-bold">{title}</h2>
+            <div className="flex items-center gap-1">
+                <h2 className="text-xl">{getAmountType()}</h2>
+                <p className="text-2xl text-purple-600">{data.length}</p>
+            </div>
+            <PrimaryButton onclick={() => pushRoute()} title="View Students"/>
+            
         </div>
     )
 }

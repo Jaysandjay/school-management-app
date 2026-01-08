@@ -22,7 +22,7 @@ export default function TeachersPage() {
         
 
     return (
-        <div className="flex flex-col h-full">3s  +-08743wer
+        <div className="flex flex-col h-full">
             <PageTitle title="Teacher Records"/>
             {isError && <p>Error..</p>}
             {isLoading ? <p>Loading...</p>:

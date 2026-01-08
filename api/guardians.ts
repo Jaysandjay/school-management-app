@@ -102,3 +102,13 @@ export async function getAvailableGuardianStudents(guardianId: number) {
     console.log("Guardian's assignable students", students)
     return students
 }
+
+export async function deleteGuardian(id: number){
+    console.log("Deleting guardian...")
+    const res = await fetch(`${API_URL}/guardians/${id}`, {
+        method: "DELETE",
+    })
+    if(!res.ok) throw new Error("Error deleting guardian")
+    console.log("Guardian deleted")
+    
+}

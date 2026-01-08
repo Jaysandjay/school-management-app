@@ -55,7 +55,7 @@ export default function GuardianList({studentId}: GuradianListProps) {
                 />
 
             ): (
-                <EmptyMessage message="No registeredGuardians"/>
+                <EmptyMessage message="No registered Guardians"/>
             )}
             {selectedGuardian && studentId &&
                 <AssignGuardianToStudentModal 

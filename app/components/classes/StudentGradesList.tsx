@@ -33,12 +33,16 @@ export default function StudentsGradesList({id}:StudentsGradesListProps){
         })
 
     useEffect(() => {
+    if (data.length === 0) return
+    if (Object.keys(editedGrades).length === 0) {
         const initial: Record<number, number> = {}
         data.forEach(s => {
             initial[s.studentId] = s.grade
         })
         setEditedGrades(initial)
-        }, [data])
+    }
+}, [data])
+
 
     const columns = ["First Name", "Last Name", "Grade"]
 

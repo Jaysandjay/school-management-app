@@ -41,7 +41,7 @@ export default function TeacherList({id, height}: TeacherListProps) {
         
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col min-h-0">
             {isError && <p>Error..</p>}
             {isLoading ? <p>Loading...</p>:
             data ? (

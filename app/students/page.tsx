@@ -6,7 +6,7 @@ export default function StudentPage() {
 
     return (
         <div className="flex flex-col h-full">
-            <PageTitle title="Student Record"/>
+            <PageTitle title="Student Records"/>
 
             <StudentList/>
 

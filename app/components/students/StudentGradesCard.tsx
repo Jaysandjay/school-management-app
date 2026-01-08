@@ -24,7 +24,7 @@ export default function StudentGradesCard({studentId}: StudentGradesCardProps){
         {key: "grade", label: "Current Grade" },
     ] as const
 
-    const total = studentGrades.reduce((sum, item) => sum + item.grade, 0)
+    const total = studentGrades.reduce((sum, item) => sum + Number(item.grade), 0)
     const average = total / studentGrades.length
     
 

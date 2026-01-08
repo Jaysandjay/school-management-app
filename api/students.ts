@@ -188,3 +188,13 @@ export async function updateStudentGrade(studentId: number, classId: number, gra
     if(!res.ok) throw new Error("Error updating grade")
     console.log(`Student ${studentId} grade updated to ${grade} in class ${classId}`)
 }
+
+export async function deleteStudent(id: number){
+    console.log("Deleting student...")
+    const res = await fetch(`${API_URL}/students/${id}`, {
+        method: "DELETE",
+    })
+    if(!res.ok) throw new Error("Error deleting student")
+    console.log("Student deleted")
+    
+}

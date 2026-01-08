@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query"
 import Table from "../ui/Table"
 import { fetchClasses } from "@/api/classes"
 import { CourseRecord } from "@/types/Course"
+import LoadingSpinner from "../ui/LoadingSpinner"
+import EmptyMessage from "../cards/EmptyMessage"
 
 
 
@@ -20,19 +22,26 @@ export default function ClassList() {
             { key: "numStudents", label: "Enrolled"},
             { key: "capacity", label: "Capacity"},
             ] as const
-
+    if(isLoading) return <LoadingSpinner/>
+    
+    console.log(data.length)
     return (
-        <div>
+        <div className="min-h-0">
             {isError && <p>Error..</p>}
-            {isLoading ? <p>Loading...</p>:
 
-            <Table
-            columns={columns}
-            rows={data}
-            urls="/classes"
-            idField="classId"
-            />
-            }
+            {data.length != 0 ? (
+                <Table
+                columns={columns}
+                rows={data}
+                urls="/classes"
+                idField="classId"
+                />
+            ):(
+                <div>
+                    <EmptyMessage message="No Classes"/>
+                </div>
+
+            )}
         </div>
     )
 }

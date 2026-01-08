@@ -1,31 +1,24 @@
-import Image from "next/image";
+"use client"
 import StatsCard from "./components/ui/StatsCard";
 import PrimaryButton from "./components/ui/PrimaryButton";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter()
   return (
-    <main className="flex flex-col w-full max-w-5xl px-6 py-0">
-      <h1 className="text-3xl font-bold mb-6">Welcome to My School Management System</h1>
+    <div className="flex-col flex h-full">
+      <main className="min-h-0 overflow-y-auto flex flex-1 flex-col items-center gap-5">
+      <h1 className="text-3xl font-bold">School Management System</h1>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <StatsCard title="Students"/>
-        <StatsCard title="Teachers"/>
-        <StatsCard title="Classes"/>
-      </div>
-
-      {/* Quick Links */}
-      <div className="flex flex-wrap gap-4 mt-8">
-        <PrimaryButton href="/students" title="View Students"/>
-        <PrimaryButton href="/teachers" title="View Teachers" color="bg-green-500"/>
-        <PrimaryButton href="/classes" title="View Classes" color="bg-purple-500"/>
-      </div>
-
-      {/* Placeholder Chart */}
-      <div className="mt-10 w-full h-64 bg-white shadow rounded flex items-center justify-center">
-        <p className="text-gray-400">[Chart Placeholder]</p>
+      <div className="flex flex-wrap justify-between w-full mb-2 items-center">
+        <StatsCard title="Students" type="student"/>
+        <StatsCard title="Guardians" type="guardian"/>
+        <StatsCard title="Teachers" type="teacher"/>
+        <StatsCard title="Classes" type="class"/>
+  
       </div>
     </main>
-
+  </div>
   );
 }
