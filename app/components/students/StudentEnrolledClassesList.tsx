@@ -18,7 +18,6 @@ interface StudentEnrolledClassesListProps {
 export default function StudentEnrolledClassesList({checked, emptyMessage, studentId, enrolled}: StudentEnrolledClassesListProps){
     const [isRemovingClass, setIsRemovingClass] = useState(false)
     const [selectedClass, setSelectedClass] = useState<CourseRecord | null>(null)
-    console.log("Enrolled:", enrolled)
 
     const {data: classes = [], isLoading, isError, error} = useQuery<CourseRecord[]>({
         queryKey: ["student-classes", studentId, enrolled ? "enrolled" : "available"],
@@ -39,7 +38,6 @@ export default function StudentEnrolledClassesList({checked, emptyMessage, stude
         { key: "capacity", label: "Capacity"},
     ] as const
 
-    console.log(isRemovingClass)
 
     
 

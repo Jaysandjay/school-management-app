@@ -15,11 +15,9 @@ export default function addStudentPage(){
         onError:(err)=> console.error("Error adding student", err)
     })
     return(
-        <div className="flex-col">
-            <div className="flex">
-            <PageTitle title="Add Student"/>
+        <div className="flex-col flex items-center justify-center w-full">
             <FormNavButtons/>
-            </div>
+      
             <StudentDetailsForm
             title="Add Student"
             onSubmit={async (student: Student) => {

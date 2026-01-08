@@ -65,6 +65,7 @@ export default function BasicInfoCard({toggle, infoCardChildren, id, type: type,
             case "student":
                 const student: StudentRecord = data as StudentRecord
                 basicInfo = {
+                    "ID": student.studentId,
                     "First Name:": student.firstName,
                     "Last Name:": student.lastName,
                     "D.O.B: ": student.dateOfBirth,
@@ -74,6 +75,7 @@ export default function BasicInfoCard({toggle, infoCardChildren, id, type: type,
             case "guardian":
                 const guardian: GuardianRecord = data as GuardianRecord
                 basicInfo = {
+                    "ID": guardian.guardianId,
                     "First Name": guardian.firstName,
                     "Last Name": guardian.lastName,
                     "Phone": guardian.phone,
@@ -83,6 +85,7 @@ export default function BasicInfoCard({toggle, infoCardChildren, id, type: type,
             case "teacher":
                 const teacher: TeacherRecord = data as TeacherRecord
                 basicInfo = {
+                    "ID": teacher.teacherId,
                     "First Name": teacher.firstName,
                     "Last Name": teacher.lastName,
                     "Phone": teacher.phone,
@@ -92,6 +95,7 @@ export default function BasicInfoCard({toggle, infoCardChildren, id, type: type,
             case "class": 
                 const course: CourseRecord = data as CourseRecord
                 basicInfo = {
+                    "ID": course.classId,
                     "Class Name": course.className,
                     "Grade Level": course.gradeLevel,
                     "Students Enrolled": course.numStudents,

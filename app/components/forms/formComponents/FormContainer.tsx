@@ -9,9 +9,7 @@ interface FormContainerProps{
 
 export default function FormContainer({title, children, submit}: FormContainerProps){
     return (
-      <BasicContainer>
-
-      <h2 className="text-xl font-semibold mb-4">{title}</h2>
+      <BasicContainer title={title}>
 
       <form onSubmit={submit} className="flex flex-col gap-4">
           <div className="flex flex-col">

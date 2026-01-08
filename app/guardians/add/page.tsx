@@ -17,11 +17,9 @@ export default function AddGuardianPage(){
 
 
     return(
-        <div className="flex-col">
-            <div className="flex">
-            <PageTitle title="Add Student"/>
+        <div className=" flex flex-col items-center w-full">
             <FormNavButtons/>
-            </div>
+           
             <GuardianDetailsForm
             title="Add Student"
             onSubmit={async (guardian: Guardian) => {

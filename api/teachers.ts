@@ -45,23 +45,41 @@ export async function updateTeacher(teacherId: number, teacher: Teacher){
 }
 
 export async function getTeacherClasses(teacherId: number){
-    return []
+    console.log("Getting Teacher classes...")
+    const res = await fetch(`${API_URL}/teachers/${teacherId}/classes`)
+    if(!res.ok) throw new Error("Error getting teacher")
+    const teacher = await res.json()
+    return teacher
 }
 
-export async function getAvailableTeacherClasses(teacherId: number){
-    return []
-}
 
 export async function getTeacherAddress(teacherId: number){
     console.log("Getting Teacher Address....")
     const res = await fetch(`${API_URL}/teachers/${teacherId}/address`)
+    if(!res.ok) throw new Error("Error getting address")
+    const address = await res.json()
+    console.log("getTeacherAdress", address)
+    return address
 }
 
-export async function updateTeacherAddress(teacherId: number, updatedAddress: Address){
+export async function updateTeacherAddress(teacherId: number, address: Address){
     console.log("Updating Teacher Address....")
-    const res = await fetch(`${API_URL}/teachers/${teacherId}/address`)
+    const res = await fetch(`${API_URL}/teachers/${teacherId}/address`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(address)
+    })
+    if(!res.ok) throw new Error("Error updating address")
+    console.log('Address Updated', address)
 }
-export async function addTeacherAddress(teacherId: number, updatedAddress: Address){
+
+export async function addTeacherAddress(teacherId: number, address: Address){
     console.log("Adding Teacher Address....")
-    const res = await fetch(`${API_URL}/teachers/${teacherId}/address`)
+    const res = await fetch(`${API_URL}/teachers/${teacherId}/address`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(address)
+    })
+    if(!res.ok) throw new Error("Error adding address")
+    console.log("Address added", address)
 }

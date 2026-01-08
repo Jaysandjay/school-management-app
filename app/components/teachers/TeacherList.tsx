@@ -51,11 +51,10 @@ export default function TeacherList({id, height}: TeacherListProps) {
                 urls="/teachers"
                 idField="teacherId"
                 addButtonColor="bg-green-600"
-                addButtonOnClick={(row)=> {
+                addButtonOnClick={id ? (row)=> {
                     setSelectedTeacher(row)
                     setIsAssigningTeacher(true)
-                    setIsRemovingTeacher(false)
-                }}
+                }: undefined}
                 addButtonTitle="Assign"
                 maxHeight={height}
                 />
@@ -63,30 +62,29 @@ export default function TeacherList({id, height}: TeacherListProps) {
             ):(
                 <EmptyMessage message="No available Teachers"/>
             )
-            }
-            {assignedTeacher && (
-                <div className="w-full flex justify-end mt-1">
-                    <PrimaryButton title="Remove Assigned Teacher" color="bg-red-600" onclick={() => setIsRemovingTeacher(true)}/>
-                </div>
+        }
+        {assignedTeacher &&
+        <div className="flex justify-end mt-5">
+            <PrimaryButton title="Remove Assigned Teacher" color="bg-red-600" onclick={() => setIsRemovingTeacher(true)}/>
+        </div>
+        }
 
-            )}
-           
-            {isAssiginingTeacher && id && selectedTeacher &&
-                <AssignTeacherToClassModal 
-                classId={id} 
-                teacher={selectedTeacher}
-                isOpen={isAssiginingTeacher}
-                onClose={() => setIsAssigningTeacher(false)}
-                />
-            }
-            {isRemovingTeacher && id && assignedTeacher &&
-                <RemoveTeacherFromClassModal
-                classId={id}
-                teacher={assignedTeacher}
-                isOpen={isRemovingTeacher}
-                onClose={() => setIsRemovingTeacher(false)}
-                />
-            }
+        {isRemovingTeacher && assignedTeacher && id && (
+            <RemoveTeacherFromClassModal
+            teacherId={assignedTeacher.teacherId}
+            classId={id}
+            isOpen={isRemovingTeacher}
+            onClose={() => setIsRemovingTeacher(false)}
+            />
+        )}
+        {isAssiginingTeacher && selectedTeacher && id && (
+            <AssignTeacherToClassModal
+            teacherId={selectedTeacher.teacherId}
+            classId={id}
+            isOpen={isAssiginingTeacher}
+            onClose={()=> setIsAssigningTeacher(false)}
+            />
+        )}
         </div>
     )
 }

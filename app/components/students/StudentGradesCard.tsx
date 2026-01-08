@@ -1,8 +1,10 @@
 "use client"
 
+import { getStudentGrades } from "@/api/students"
 import BasicContainer from "../ui/BasicContainer"
 import Table from "../ui/Table"
 import { StudentGrade } from "@/types/StudentGrade"
+import { useQuery } from "@tanstack/react-query"
 
 interface StudentGradesCardProps {
     studentId: number
@@ -10,13 +12,11 @@ interface StudentGradesCardProps {
 
 export default function StudentGradesCard({studentId}: StudentGradesCardProps){
 
-    const dummydata: StudentGrade[] = [
-        {classId: 100, className: "Math", grade: 75},
-        {classId: 101, className: "Math", grade: 75},
-        {classId: 102, className: "Math", grade: 60},
-        {classId: 103, className: "Math", grade: 35},
-        {classId: 104, className: "Math", grade: 20},
-    ]
+    const {data: studentGrades=[]} = useQuery<StudentGrade[]>({
+        queryKey: ["student-grades", studentId],
+        queryFn: () => getStudentGrades(studentId),
+        enabled: !!studentId
+    })
 
     const columns = [
         {key: "classId", label: "ID" },
@@ -24,15 +24,15 @@ export default function StudentGradesCard({studentId}: StudentGradesCardProps){
         {key: "grade", label: "Current Grade" },
     ] as const
 
-    const total = dummydata.reduce((sum, item) => sum + item.grade, 0)
-    const average = total / dummydata.length
+    const total = studentGrades.reduce((sum, item) => sum + item.grade, 0)
+    const average = total / studentGrades.length
     
 
     return (
-        <BasicContainer title="Grades" subtitle={`Average: ${average}%`}>
+        <BasicContainer title="Grades" subtitle={`Average: ${average ? average : 0}%`}>
             <Table
             columns={columns}
-            rows={dummydata}
+            rows={studentGrades}
             idField={"classId"}
             maxHeight="max-h-50"
             searchBar={false}

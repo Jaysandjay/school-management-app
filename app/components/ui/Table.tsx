@@ -108,3 +108,8 @@ export default function Table<RowType extends object>({searchBar=true, maxHeight
 </div>
     )
 }
+
+
+
+
+

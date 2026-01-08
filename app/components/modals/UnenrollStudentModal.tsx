@@ -29,11 +29,14 @@ export default function UnenrollStudentModal ({type, classId, studentId, isOpen,
                 case "student": {
                     queryClient.invalidateQueries({queryKey: ["student-classes", studentId, "enrolled"]}),
                     queryClient.invalidateQueries({queryKey: ["student-classes", studentId, "available"]})
+                    queryClient.invalidateQueries({queryKey: ["student-grades", studentId]})                    
+
                 }
                 break
                 case "class": {
                     queryClient.invalidateQueries({queryKey: ["class-students", classId, "enrolled"]}),
                     queryClient.invalidateQueries({queryKey: ["class-students", classId, "available"]})
+                    queryClient.invalidateQueries({queryKey: ["class-grades", classId]})                    
                 }
                 break
             }

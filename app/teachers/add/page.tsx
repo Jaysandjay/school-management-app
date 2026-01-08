@@ -16,11 +16,9 @@ export default function addTeacherPage(){
     })
 
     return(
-        <div className="flex-col">
-            <div className="flex">
-            <PageTitle title="Add Teacher"/>
+        <div className="flex-col flex items-center">
+
             <FormNavButtons/>
-            </div>
             <TeacherDetailsForm 
             title="Add Teacher"
             onSubmit={async (teacher: Teacher) => {

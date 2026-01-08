@@ -34,7 +34,7 @@ export default function StudentList({buttonTitle="Add", buttonColor="bg-green-60
         if(id && context){
             switch(context){
                 case "guardian": return ["guardian-students"]
-                case "enrollment-assignable": return ["class-students", id, "available" ] 
+                case "enrollment-assignable": return (["class-students", id, "available"] )
                 case "enrollment-assigned": return ["class-students", id, "enrolled" ] 
                 default: return ["students"]
             }
@@ -69,7 +69,6 @@ export default function StudentList({buttonTitle="Add", buttonColor="bg-green-60
             { key: "studentId", label: "ID" },
             { key: "firstName", label: "First Name" },
             { key: "lastName", label: "Last Name" },
-            { key: "dateOfBirth", label: "D.O.B" },
             { key: "gradeLevel", label: "Grade Level" },
             ] as const
 

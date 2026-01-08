@@ -1,17 +1,18 @@
 import { useState } from "react"
 import BasicModalContainer from "./ui/BasicModalContainer"
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {  enrollStudent } from "@/api/students";
 import PrimaryButton from "../ui/PrimaryButton";
 import { CourseRecord } from "@/types/Course";
-import { assignClassTeacher } from "@/api/classes";
-import { TeacherRecord } from "@/types/Teacher";
+import { assignClassTeacher, getClass } from "@/api/classes";
+import { Teacher, TeacherRecord } from "@/types/Teacher";
+import { getTeacher } from "@/api/teachers";
 
 interface AssignTeacherToClassModalProps {
     classId: number,
-    teacher: TeacherRecord,
+    teacherId: number,
     isOpen: boolean,
-    onClose: () => void;
+    onClose: () => void;   
 }
 
 interface AssignVariables {
@@ -19,16 +20,33 @@ interface AssignVariables {
     teacherId: number,
 }
 
-export default function AssignTeacherToClassModal ({classId, teacher, isOpen, onClose}: AssignTeacherToClassModalProps) {
+export default function AssignTeacherToClassModal ({ classId, teacherId, isOpen, onClose}: AssignTeacherToClassModalProps) {
     const [isSuccessfullyAssigned, setIsSuccessfullyAssigned] = useState(false)
-    const teacherId = teacher.teacherId
     const queryClient = useQueryClient()
+
+    const {data: teacher} = useQuery<TeacherRecord>({
+        queryKey: ["teacher", teacherId],
+        queryFn: () => getTeacher(teacherId),
+        enabled: !!teacherId
+    })
+
+    const {data: course} = useQuery<CourseRecord>({
+        queryKey: ["class", classId],
+        queryFn: () => getClass(classId),
+        enabled: !!classId
+    })
+
+
 
     
     const mutation = useMutation({
     mutationFn: ({classId, teacherId}: AssignVariables) => assignClassTeacher(classId, teacherId),
     onSuccess: () => {
         queryClient.invalidateQueries({queryKey: ["class-teacher", classId]})
+        queryClient.invalidateQueries({queryKey: ["teacher-classes", teacherId]})
+        queryClient.invalidateQueries({queryKey: ["classes", "unassigned"]})
+        
+        
     }
     })
     
@@ -51,7 +69,7 @@ export default function AssignTeacherToClassModal ({classId, teacher, isOpen, on
             {isSuccessfullyAssigned ? (
                 <h2>Successfully assigned!</h2>
             ) : (
-                <h2>Are you sure you want to assign {teacher.firstName} {teacher.lastName} to class?</h2>
+                <h2>Are you sure you want to assign {teacher?.firstName} {teacher?.lastName} to {course?.className}</h2>
             )}
 
             <div>

@@ -1,14 +1,13 @@
 "use client"
-import { getClass, getClassTeacher } from "@/api/classes"
+import { getClass } from "@/api/classes"
 import BasicInfoCard from "@/app/components/cards/BasicInfoCard"
 import AssignTeacherCard from "@/app/components/classes/AssignTeacherCard"
 import ClassTeacherCard from "@/app/components/classes/ClassTeacherCard"
 import EnrollStudentsToClassCard from "@/app/components/classes/EnrollStudentToClassCard"
-import InfoCard from "@/app/components/ui/infoCard"
+import StudentsGradesList from "@/app/components/classes/StudentGradesList"
 import LoadingSpinner from "@/app/components/ui/LoadingSpinner"
 import PageTitle from "@/app/components/ui/PageTitle"
 import { CourseRecord } from "@/types/Course"
-import { TeacherRecord } from "@/types/Teacher"
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "next/navigation"
 
@@ -35,8 +34,12 @@ export default function ClassPage(){
                     <BasicInfoCard id={id} type="class"/>
                     <ClassTeacherCard id={id}/>
                 </div>
+                <div className="w-full flex justify-around gap-1">
+                <StudentsGradesList id={id}/>
                 <EnrollStudentsToClassCard id={id}/>
+                </div>
                 <AssignTeacherCard id={id}/>
+
 
 
             </main>
@@ -44,3 +47,4 @@ export default function ClassPage(){
     )
 
 }
+

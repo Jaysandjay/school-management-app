@@ -19,6 +19,14 @@ export async function getClass(id: number) {
     return course
 }
 
+export async function getUnassignedClasses() {
+    console.log("Getting Unassigned classes...")
+    const res = await fetch(`${API_URL}/classes/unassigned`)
+    if(!res.ok) throw new Error("Error getting class")
+    const courses = await res.json()
+    return courses
+}
+
 export async function addclass(course:Course) {
     console.log("Adding Class....")
     const res = await fetch(`${API_URL}/classes`, {
@@ -99,4 +107,13 @@ export async function getClassAvailableStudents(id: number){
     }))
     console.log('Class Students', students)
     return students
+}
+
+export async function getClassGrades(id: number) {
+    console.log("Getting class grades...")
+    const res = await fetch(`${API_URL}/classes/${id}/grades`)
+    if(!res.ok) throw new Error("Error getting class grades")
+    const grades = await res.json()
+    console.log(`Class Grades`, grades)
+    return grades
 }

@@ -81,7 +81,7 @@ export default function AddressCard({id, personType}: AddressCardProps){
             toggle={toggleEdit}
             />):
         ( address? <InfoCard title="Address" data={basicInfo} toggle={toggleEdit} isLoading={isLoading}/>:
-        <InfoCard title="Address" toggle={toggleEdit}/> 
+        <InfoCard title="Address" toggle={toggleEdit} emptyMessage="No saved address"/> 
 
         )}
         {mutation.isPending && <LoadingSpinner/>}

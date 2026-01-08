@@ -1,14 +1,15 @@
 import { useState } from "react"
 import BasicModalContainer from "./ui/BasicModalContainer"
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {  enrollStudent } from "@/api/students";
 import PrimaryButton from "../ui/PrimaryButton";
 import { CourseRecord } from "@/types/Course";
-import { assignClassTeacher, removeClassTeacher } from "@/api/classes";
+import { assignClassTeacher, getClass, removeClassTeacher } from "@/api/classes";
 import { TeacherRecord } from "@/types/Teacher";
+import { getTeacher } from "@/api/teachers";
 
 interface RemoveTeacherFromClassModalProps {
-    teacher: TeacherRecord,
+    teacherId: number,
     classId: number,
     isOpen: boolean,
     onClose: () => void;
@@ -18,13 +19,28 @@ interface AssignVariables {
     classId: number
 }
 
-export default function RemoveTeacherFromClassModal ({classId, teacher, isOpen, onClose}: RemoveTeacherFromClassModalProps) {
+export default function RemoveTeacherFromClassModal ({classId, teacherId, isOpen, onClose}: RemoveTeacherFromClassModalProps) {
     const [isSuccessfullyRemoved, setIsSuccessfullyRemoved] = useState(false)
     const queryClient = useQueryClient()
-    
+
+    const {data: teacher} = useQuery<TeacherRecord>({
+        queryKey: ["teacher", teacherId],
+        queryFn: () => getTeacher(teacherId),
+        enabled: !!teacherId
+    })
+
+    const {data: course} = useQuery<CourseRecord>({
+        queryKey: ["class", classId],
+        queryFn: () => getClass(classId),
+        enabled: !!classId
+    })
+
     const mutation = useMutation({
     mutationFn: ({classId}: AssignVariables) => removeClassTeacher(classId),
-    onSuccess: () => queryClient.invalidateQueries({queryKey: ["class-teacher", classId]}),
+    onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ["class-teacher", classId]})
+        queryClient.invalidateQueries({queryKey: ["teacher-classes", teacherId]})
+        }
     })
     
     async function AssignTeacher(){
@@ -46,7 +62,7 @@ export default function RemoveTeacherFromClassModal ({classId, teacher, isOpen, 
             {isSuccessfullyRemoved ? (
                 <h2>Successfully Removed!</h2>
             ) : (
-                <h2>Are you sure you want to remove {teacher.firstName} {teacher.lastName} from class?</h2>
+                <h2>Are you sure you want to remove {teacher?.firstName} {teacher?.lastName} from {course?.className}?</h2>
             )}
 
             <div>

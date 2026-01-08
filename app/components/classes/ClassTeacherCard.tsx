@@ -51,7 +51,7 @@ export default function ClassTeacherCard({id}: ClassTeacherCardProps){
             {isRemovingTeacher && teacher &&
             <RemoveTeacherFromClassModal
             classId={id}
-            teacher={teacher}
+            teacherId={teacher.teacherId}
             isOpen={isRemovingTeacher}
             onClose={() => setIsRemovingTeacher(false)}
             />

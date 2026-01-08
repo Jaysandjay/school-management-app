@@ -166,3 +166,25 @@ export async function removeStudentGuardian(studentId: number, guardianId: numbe
     if(!res.ok) throw new Error("Error removing guardian from student")
     console.log(`Guardian ${guardianId} removed from student ${studentId}`)
 }
+
+export async function getStudentGrades(id: number) {
+    console.log("Getting student grades...")
+    const res = await fetch(`${API_URL}/students/${id}/grades`)
+    if(!res.ok) throw new Error("Error getting student grades")
+    const grades = await res.json()
+    console.log(`Student Grades`, grades)
+    return grades
+}
+
+export async function updateStudentGrade(studentId: number, classId: number, grade: number) {
+    console.log("Updating grade...")
+    console.log(grade, typeof grade)
+    const res = await fetch(`${API_URL}/students/${studentId}/grade`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({classId: classId, grade: grade})
+    })
+    console.log(res)
+    if(!res.ok) throw new Error("Error updating grade")
+    console.log(`Student ${studentId} grade updated to ${grade} in class ${classId}`)
+}
