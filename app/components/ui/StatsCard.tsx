@@ -52,7 +52,7 @@ export default function StatsCard({title, type}: StatCardPops){
                 <h2 className="text-xl">{getAmountType()}</h2>
                 <p className="text-2xl text-purple-600">{data.length}</p>
             </div>
-            <PrimaryButton onclick={() => pushRoute()} title="View Students"/>
+            <PrimaryButton onclick={() => pushRoute()} title={`View ${type === "class" ? "Classes": type.charAt(0).toUpperCase() + type.slice(1)+"s"}`} />
             
         </div>
     )
