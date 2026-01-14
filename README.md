@@ -46,12 +46,9 @@ Key goals of the project:
 
 ## Students
 
-![Students Page](./screenshots/students.png)
-
-The Students module allows administrators to:
+The Students section manages:
 - Create, view, update, and delete student records
 - Associate students with guardians and classes
-- Maintain consistent relational integrity across the system
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -59,20 +56,15 @@ The Students module allows administrators to:
 
 ## Guardians
 
-![Guardians Page](./screenshots/guardians.png)
-
 The Guardians section manages parent/guardian information, including:
 - Contact details
 - Relationships to one or more students
-- Secure updates without breaking data relationships
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
 
 ## Teachers
-
-![Teachers Page](./screenshots/teachers.png)
 
 Teachers can be managed through this module with features such as:
 - Teacher profile creation and updates
@@ -85,12 +77,10 @@ Teachers can be managed through this module with features such as:
 
 ## Classes
 
-![Classes Page](./screenshots/classes.png)
-
 The Classes module handles:
-- Class creation and scheduling
+- Class creation and updates
 - Student and teacher associations
-- Capacity and grade-level constraints enforced at the database level
+- Current grades for each student
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
