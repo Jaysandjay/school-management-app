@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<a id="readme-top"></a>
 
-## Getting Started
+<br />
 
-First, run the development server:
+<div align="center">
+  <img width="45" height="45" alt="image" src="https://github.com/user-attachments/assets/8509459f-860d-46fa-9875-8575274907b1" />
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+  <h3 align="center">School Management App</h3>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  <p align="center">
+    An administrative platform engineered to manage complex relational data structures for educational institutions.
+    It features a responsive React interface and a TypeScript + Express backend, utilizing a PostgreSQL database to
+    maintain data integrity across Students, Teachers, Classes, and Guardians with full CRUD functionality.
+  </p>
+</div>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Table of Contents
 
-## Learn More
+- [About The Project](#about-the-project)
+- [Students](#students)
+- [Guardians](#guardians)
+- [Teachers](#teachers)
+- [Classes](#classes)
+- [Future Improvements](#future-improvements)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## About The Project
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project was built to gain hands-on experience working with **relational databases** and complex entity relationships using **PostgreSQL**.
 
-## Deploy on Vercel
+The application is built with **Next.js** on the frontend and leverages **TanStack Query** for efficient server-state management.  
+The backend is developed using **TypeScript and Express**, following RESTful API principles to support full CRUD operations.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Key goals of the project:
+- Practice relational database design
+- Implement clean RESTful APIs
+- Manage real-world entity relationships
+- Build a scalable full-stack application
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Students
+
+![Students Page](./screenshots/students.png)
+
+The Students module allows administrators to:
+- Create, view, update, and delete student records
+- Associate students with guardians and classes
+- Maintain consistent relational integrity across the system
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Guardians
+
+![Guardians Page](./screenshots/guardians.png)
+
+The Guardians section manages parent/guardian information, including:
+- Contact details
+- Relationships to one or more students
+- Secure updates without breaking data relationships
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Teachers
+
+![Teachers Page](./screenshots/teachers.png)
+
+Teachers can be managed through this module with features such as:
+- Teacher profile creation and updates
+- Assignment to one or multiple classes
+- Relational enforcement with class records
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Classes
+
+![Classes Page](./screenshots/classes.png)
+
+The Classes module handles:
+- Class creation and scheduling
+- Student and teacher associations
+- Capacity and grade-level constraints enforced at the database level
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Future Improvements
+
+Planned enhancements include:
+- Integrating attendance tracking for students within classes
+- Implementing full CRUD functionality for class schedules
+- Developing a dynamic and interactive UI for schedule management
+- Enforcing scheduling constraints to prevent teacher and student time conflicts
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
