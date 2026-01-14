@@ -34,6 +34,11 @@ This project was built to gain hands-on experience working with **relational dat
 The application is built with **Next.js** on the frontend and leverages **TanStack Query** for efficient server-state management.  
 The backend is developed using **TypeScript and Express**, following RESTful API principles to support full CRUD operations.
 
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+
 Key goals of the project:
 - Practice relational database design
 - Implement clean RESTful APIs
