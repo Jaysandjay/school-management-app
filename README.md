@@ -94,6 +94,7 @@ The Classes module handles:
 ## Future Improvements
 
 Planned enhancements include:
+- Implement Winsotn logging
 - Integrating attendance tracking for students within classes
 - Implementing full CRUD functionality for class schedules
 - Developing a dynamic and interactive UI for schedule management
